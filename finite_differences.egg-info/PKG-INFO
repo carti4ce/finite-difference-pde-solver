@@ -1,0 +1,8 @@
+Metadata-Version: 2.4
+Name: finite_differences
+Version: 0.1.0
+Summary: Modular finite-difference PDE solver (1D/2D)
+Requires-Python: >=3.10
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: matplotlib
