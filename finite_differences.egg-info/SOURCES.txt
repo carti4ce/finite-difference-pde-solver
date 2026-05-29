@@ -15,4 +15,5 @@ finite_differences.egg-info/dependency_links.txt
 finite_differences.egg-info/requires.txt
 finite_differences.egg-info/top_level.txt
 tests/test_grid.py
+tests/test_heat.py
 tests/test_poisson.py

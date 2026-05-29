@@ -12,3 +12,6 @@ dependencies = [
     "scipy",
     "matplotlib"
 ]
+
+[tool.setuptools]
+packages = ["finite_differences"]
