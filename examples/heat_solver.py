@@ -21,7 +21,8 @@ def run_explicit(nx=64, ny=64, alpha=1e-3, dt=1e-4, steps=100):
     grid = Grid(nx, ny, lx=1.0, ly=1.0)
     f = Field(grid, ng=1)
     X, Y = grid.mesh()
-    u0 = np.exp(-((X - 0.5) ** 2 + (Y - 0.5) ** 2) / 0.01)
+    r = np.sqrt((X - 0.5)**2 + (Y - 0.5)**2)
+    u0 = np.exp(-((r - 0.3)**2) / 0.005)
     f.set_interior(u0)
     bc = Dirichlet(0.0)
     interior_history = []
@@ -40,7 +41,8 @@ def run_cn(nx=64, ny=64, alpha=1e-3, dt=1e-3, steps=50):
     grid = Grid(nx, ny, lx=1.0, ly=1.0)
     f = Field(grid, ng=1)
     X, Y = grid.mesh()
-    u0 = np.exp(-((X - 0.5) ** 2 + (Y - 0.5) ** 2) / 0.01)
+    r = np.sqrt((X - 0.5)**2 + (Y - 0.5)**2)
+    u0 = np.exp(-((r - 0.3)**2) / 0.005)
     f.set_interior(u0)
     bc = Dirichlet(0.0)
     solver = LinearSolver()
@@ -55,12 +57,13 @@ def run_cn(nx=64, ny=64, alpha=1e-3, dt=1e-3, steps=50):
 
 if __name__ == '__main__':
 
+    # Show plots after creation
     show_plots = False
 
     nx = ny = 64
-    alpha = 0.1
+    alpha = 1
     dt = 5e-5
-    steps = 500
+    steps = 250
 
     # Run Crank Nicholson
     print(f"\nRunning Crank-Nicholson scheme on 2-D heat equation with parameters: nx={nx}, ny={ny}, alpha={alpha}, dt={dt}, steps={steps}.")
