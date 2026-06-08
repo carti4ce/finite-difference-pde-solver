@@ -15,3 +15,6 @@ dependencies = [
 
 [tool.setuptools]
 packages = ["finite_differences"]
+
+[project.optional-dependencies]
+web = ["streamlit"]
