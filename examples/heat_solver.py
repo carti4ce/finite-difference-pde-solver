@@ -47,7 +47,7 @@ def run_cn(nx=64, ny=64, alpha=1e-3, dt=1e-3, steps=50):
     bc = Dirichlet(0.0)
     solver = LinearSolver()
     interior_history = []
-    for n in range(steps):
+    for _ in range(steps):
         bc.apply(f)
         f = crank_nicolson(f, laplacian_5pt, dt, alpha, solver)
         interior_history.append(f.interior.copy())
@@ -84,8 +84,8 @@ if __name__ == '__main__':
     )
     anim.save(
         "examples/example_plots/heat2d_CN_animation.gif",
-        writer="pillow",
-        fps=1000 // 25  # matches interval_ms=50
+        writer="ffmpeg",
+        fps=1000 // 25
     )
     if show_plots: plt.show()
 
@@ -110,8 +110,8 @@ if __name__ == '__main__':
     )
     anim.save(
         "examples/example_plots/heat2d_explicit_animation.gif",
-        writer="pillow",
-        fps=1000 // 25  # matches interval_ms=50
+        writer="ffmpeg",
+        fps=1000 // 25
     )
     if show_plots: plt.show()
 

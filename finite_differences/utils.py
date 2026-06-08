@@ -53,17 +53,19 @@ def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, 
     if title: ax.set_title(f'{title} | Step {0} of {num_frames - 1}')
     if cbarlabel: fig.colorbar(im, ax=ax, label=cbarlabel)
 
+    title_obj = ax.set_title(f'{title} | Step {1} of {num_frames}')
+
     def update(frame):
         new_data = arr[frame]
         im.set_array(new_data)
-        ax.set_title(f'{title} | Step {frame} of {num_frames - 1}')
-        return im,
+        title_obj.set_text(f'{title} | Step {frame} of {num_frames}')
+        return im, title_obj
 
     anim = FuncAnimation(fig,
                          update,
                          frames=num_frames,
                          interval=interval_ms,
-                         blit=False,  # CRITICAL
+                         blit=True,
                          repeat=True)
 
     return anim,fig
