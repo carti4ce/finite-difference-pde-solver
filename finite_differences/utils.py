@@ -1,6 +1,5 @@
 """Utility helpers: small plotting and I/O helpers."""
 from __future__ import annotations
-
 import matplotlib.pyplot as plt
 from IPython.core.pylabtools import figsize
 from matplotlib.animation import FuncAnimation
@@ -11,16 +10,22 @@ import numpy as np
 # plt.style.use(['science', 'notebook'])
 
 
-def quick_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, cmap='viridis'):
-    img = plt.imshow(arr.T, origin="lower", cmap=cmap)
-    cbar = plt.colorbar(img)
+def quick_plot_2d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=None, ylabel=None, cbarlabel=None, cmap='viridis'):
+    fig, ax = plt.subplots(figsize=(8,6))
+    img = ax.imshow(
+        arr.T, 
+        origin="lower", 
+        cmap=cmap,
+        vmin=vmin_global,
+        vmax=vmax_global
+    )
 
-    if title: plt.title(title)
-    if xlabel: plt.xlabel(xlabel)
-    if ylabel: plt.ylabel(ylabel)
-    if cbarlabel: cbar.set_label(cbarlabel, rotation=270, labelpad=15)
+    if title: ax.set_title(title)
+    if xlabel: ax.set_xlabel(xlabel)
+    if ylabel: ax.set_ylabel(ylabel)
+    if cbarlabel: fig.colorbar(img, ax=ax, label=cbarlabel)
     
-    plt.show()
+    return fig, ax
 
 
 def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, interval_ms=50, cmap='viridis'):
