@@ -28,7 +28,7 @@ def quick_plot_2d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=No
     return fig, ax
 
 
-def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, interval_ms=50, cmap='viridis'):
+def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, interval_ms=50, cmap='viridis', verbose=False):
 
     num_frames = arr.shape[0]
 
@@ -38,8 +38,9 @@ def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, 
     
     total_duration_seconds = (interval_ms * num_frames) / 1000
 
-    print(f"Animation calculated for {num_frames} frames over {total_duration_seconds} seconds.")
-    print(f"Interval set to {interval_ms:.2f} ms per frame.")
+    if verbose:
+        print(f"Animation calculated for {num_frames} frames over {total_duration_seconds} seconds.")
+        print(f"Interval set to {interval_ms:.2f} ms per frame.")
 
     fig, ax = plt.subplots(figsize=(8, 6))
 
