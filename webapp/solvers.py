@@ -1,5 +1,3 @@
-"""Solver wrappers for Heat and Laplace equations (1D/2D)."""
-
 import numpy as np
 from finite_differences import Grid, Field
 from finite_differences.bc import Dirichlet, Neumann
