@@ -59,13 +59,13 @@ if dimension:
 
     # UI: Grid resolution
     st.subheader("Grid Resolution")
-    col_res_x, col_res_y = st.columns(2 if dimension == "2D" else [1])
+    col_res_x, *col_res_y = st.columns(2 if dimension == "2D" else [1])
 
     with col_res_x:
         nx = st.slider("Number of points (x)", min_value=10, max_value=200, value=50)
 
     if dimension == "2D":
-        with col_res_y:
+        with col_res_y[0]:
             ny = st.slider("Number of points (y)", min_value=10, max_value=200, value=50)
     else:
         ny = 1
@@ -136,7 +136,7 @@ if dimension:
             with st.spinner("Solving..."):
                 # Create initial condition
                 grid_shape = (nx,) if dimension == "1D" else (nx, ny)
-                grid_bounds = (x_bounds,) if dimension == "1D" else (x_bounds, y_bounds)
+                grid_bounds = x_bounds if dimension == "1D" else (x_bounds, y_bounds)
 
                 ic_shape_map = {
                     "Gaussian": "gaussian",
@@ -267,7 +267,7 @@ if dimension:
 
         if st.button("Solve Laplace's Equation"):
             with st.spinner("Solving..."):
-                grid_bounds = (x_bounds,) if dimension == "1D" else (x_bounds, y_bounds)
+                grid_bounds = x_bounds if dimension == "1D" else (x_bounds, y_bounds)
 
                 solution = solve_laplace_equation(
                     dimension=dimension,
