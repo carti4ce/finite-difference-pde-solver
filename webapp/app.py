@@ -1,4 +1,4 @@
-"""Streamlit webapp for PDE solver demonstrations."""
+"""Streamlit webapp for PDE solver demo"""
 
 import streamlit as st
 import numpy as np
@@ -132,7 +132,15 @@ if dimension:
         else:
             dt = None
 
-        if st.button("Solve Heat Equation"):
+        anim_container = st.container()
+        with anim_container:
+            generate_animation = st.segmented_control(
+                "**Generate Animation:**",
+                ["True", "False"],
+                selection_mode="single",
+    )
+
+        if st.button("Solve Heat Equation", key="generate_heat"):
             with st.spinner("Solving..."):
                 # Create initial condition
                 grid_shape = (nx,) if dimension == "1D" else (nx, ny)
@@ -198,7 +206,7 @@ if dimension:
                 plt.close(fig_initial)
 
             # Animation
-            if num_steps > 1:
+            if generate_animation == "True":
                 st.subheader("Solution Evolution")
                 with st.spinner("Creating animation..."):
                     try:
@@ -289,4 +297,4 @@ if dimension:
             plt.close(fig)
 
 else:
-    st.info("👈 Select an equation and dimension to get started!")
+    st.info("Select an equation and dimension to get started!")
