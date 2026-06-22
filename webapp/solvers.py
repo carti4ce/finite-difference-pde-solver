@@ -79,14 +79,14 @@ def solve_heat_equation(
     solution_history = [f.interior.copy()]
     time_array = np.array([0.0])
 
+    bc.apply(f)
+
     # Time stepping
     for step in range(num_steps):
-        bc.apply(f)
         f = crank_nicolson(f, laplacian_5pt, dt, alpha, solver)
+        bc.apply(f)
         solution_history.append(f.interior.copy())
         time_array = np.append(time_array, (step + 1) * dt)
-
-    bc.apply(f)
 
     # Return stacked history
     solution_array = np.asarray(solution_history)

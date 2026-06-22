@@ -18,7 +18,7 @@ class Dirichlet(BC):
         self.value = value
 
     def apply(self, field):
-        ng = field.ng
+        ng = field.ng + 1
         if field.grid.ny == 1:
             field.data[:ng] = self.value
             field.data[-ng:] = self.value
