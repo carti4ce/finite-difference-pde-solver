@@ -4,7 +4,7 @@ import streamlit as st
 import numpy as np
 from initial_conditions import create_initial_condition
 from solvers import solve_heat_equation, solve_laplace_equation
-from finite_differences.utils import quick_plot_2d, animated_plot_2d
+from finite_differences.utils import quick_plot, animated_plot_2d
 import matplotlib.pyplot as plt
 import tempfile
 import os
@@ -186,13 +186,14 @@ if dimension:
 
             with col_plot1:
                 st.subheader("Final Solution")
-                fig_final, _ = quick_plot_2d(
+                fig_final, _ = quick_plot(
                     solution_history[-1],
+                    dimension=dimension,
                     vmin_global=solution_history.min(),
                     vmax_global=solution_history.max(),
                     title="Final Temperature Distribution",
                     xlabel="x",
-                    ylabel="y" if dimension == "2D" else "",
+                    ylabel="y",
                     cbarlabel="Temperature",
                     extent=extent
                 )
@@ -201,13 +202,14 @@ if dimension:
 
             with col_plot2:
                 st.subheader("Initial Condition")
-                fig_initial, _ = quick_plot_2d(
+                fig_initial, _ = quick_plot(
                     solution_history[0],
+                    dimension=dimension,
                     vmin_global=solution_history.min(),
                     vmax_global=solution_history.max(),
                     title="Initial Temperature Distribution",
                     xlabel="x",
-                    ylabel="y" if dimension == "2D" else "",
+                    ylabel="y",
                     cbarlabel="Temperature",
                     extent=extent
                 )
@@ -316,12 +318,13 @@ if dimension:
             st.success("Solution computed!")
 
             st.subheader("Solution")
-            fig, ax = quick_plot_2d(
+            fig, ax = quick_plot(
                 solution,
+                dimension=dimension,
                 title="Laplace Equation Solution",
                 xlabel="x",
                 ylabel="y" if dimension == "2D" else "",
-                cbarlabel="Potential",
+                cbarlabel="Temperature",
             )
             st.pyplot(fig)
             plt.close(fig)
