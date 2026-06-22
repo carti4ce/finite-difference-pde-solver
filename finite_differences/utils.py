@@ -9,6 +9,18 @@ import numpy as np
 # import scienceplots
 # plt.style.use(['science', 'notebook'])
 
+def quick_plot(arr, dimension, vmin_global=None, vmax_global=None,
+               title=None, xlabel=None, ylabel=None, cbarlabel=None, cmap='viridis', extent=None):
+    if dimension == "1D":
+        return quick_plot_1d(arr, title=title, xlabel=xlabel, ylabel=ylabel, extent=extent)
+    elif dimension == "2D":
+        return quick_plot_2d(arr, vmin_global=vmin_global, vmax_global=vmax_global, title=title, xlabel=xlabel, ylabel=ylabel,
+                             cbarlabel=cbarlabel, cmap=cmap, extent=extent)
+    else:
+        raise ValueError(f"Invalid Dimension: {dimension}")
+
+def quick_plot_1d(arr, title=None, xlabel=None, ylabel=None, extent=None):
+    return
 
 def quick_plot_2d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=None, ylabel=None, cbarlabel=None, cmap='viridis', extent=None):
     fig, ax = plt.subplots(figsize=(8,6))
