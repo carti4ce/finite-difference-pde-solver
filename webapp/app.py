@@ -4,10 +4,11 @@ import streamlit as st
 import numpy as np
 from initial_conditions import create_initial_condition
 from solvers import solve_heat_equation, solve_laplace_equation
-from finite_differences.utils import quick_plot, animated_plot_2d
+from finite_differences.utils import quick_plot, animated_plot
 import matplotlib.pyplot as plt
 import tempfile
 import os
+import traceback
 
 st.set_page_config(page_title="PDE Solver", layout="wide")
 st.title("Finite Difference PDE Solver")
@@ -224,8 +225,9 @@ if dimension:
                         st.subheader("Solution Evolution")
                         with st.spinner("Creating animation..."):
                             
-                            anim, fig = animated_plot_2d(
+                            anim, fig = animated_plot(
                                 solution_history,
+                                dimension=dimension,
                                 title="Heat Equation Evolution",
                                 xlabel="x",
                                 ylabel="y" if dimension == "2D" else "",
@@ -259,6 +261,7 @@ if dimension:
                     st.info("Animation saved. Click download button to get the GIF.")
                     plt.close(fig)
                 except Exception as e:
+                    traceback.print_exc()
                     st.warning(f"Animation creation failed: {e}")
 
 
