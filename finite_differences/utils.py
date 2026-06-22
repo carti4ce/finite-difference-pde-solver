@@ -12,15 +12,27 @@ import numpy as np
 def quick_plot(arr, dimension, vmin_global=None, vmax_global=None,
                title=None, xlabel=None, ylabel=None, cbarlabel=None, cmap='viridis', extent=None):
     if dimension == "1D":
-        return quick_plot_1d(arr, title=title, xlabel=xlabel, ylabel=ylabel, extent=extent)
+        return quick_plot_1d(arr, vmin_global=vmin_global, vmax_global=vmax_global, title=title, xlabel=xlabel, ylabel=ylabel, extent=extent)
     elif dimension == "2D":
         return quick_plot_2d(arr, vmin_global=vmin_global, vmax_global=vmax_global, title=title, xlabel=xlabel, ylabel=ylabel,
                              cbarlabel=cbarlabel, cmap=cmap, extent=extent)
     else:
         raise ValueError(f"Invalid Dimension: {dimension}")
 
-def quick_plot_1d(arr, title=None, xlabel=None, ylabel=None, extent=None):
-    return
+def quick_plot_1d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=None, ylabel=None, extent=None):
+
+    n = len(arr)
+    Xs = np.linspace(extent[0], extent[1], num=n, endpoint=True)
+
+    fig, ax = plt.subplots(figsize=(8,6))
+    ax.plot(Xs, arr)
+
+    if title: ax.set_title(title)
+    if xlabel: ax.set_xlabel(xlabel)
+    if ylabel: ax.set_ylabel(ylabel)
+    if vmax_global is not None: ax.set_ylim([vmin_global * 0.8, vmax_global * 1.2])
+
+    return fig, ax
 
 def quick_plot_2d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=None, ylabel=None, cbarlabel=None, cmap='viridis', extent=None):
     fig, ax = plt.subplots(figsize=(8,6))
