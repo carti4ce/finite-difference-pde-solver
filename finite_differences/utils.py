@@ -177,8 +177,10 @@ def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, 
     vmin_global = arr.min()
     vmax_global = arr.max()
 
+    arr_T = arr.transpose(0, 2, 1)
+
     im = ax.imshow(
-        arr[0].T,
+        arr_T[0],
         origin='lower',
         cmap=cmap,
         vmin=vmin_global,
@@ -194,7 +196,7 @@ def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, 
     title_obj = ax.set_title(f'{title} | Step {1} of {num_frames}')
 
     def update(frame):
-        new_data = arr[frame].T
+        new_data = arr_T[frame]
         im.set_array(new_data)
         title_obj.set_text(f'{title} | Step {frame} of {num_frames}')
         return im, title_obj
