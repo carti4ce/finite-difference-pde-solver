@@ -6,7 +6,8 @@ from initial_conditions import create_initial_condition
 from solvers import solve_heat_equation, solve_laplace_equation
 from finite_differences.utils import quick_plot_2d, animated_plot_2d
 import matplotlib.pyplot as plt
-import io
+import tempfile
+import os
 
 st.set_page_config(page_title="PDE Solver", layout="wide")
 st.title("Finite Difference PDE Solver")
@@ -70,7 +71,12 @@ if dimension:
     else:
         ny = 1
 
-    # Equation-specific parameters
+
+
+    # ****              Heat Equation Logic            ****
+
+
+
     if equation == "Heat Equation":
         st.subheader("Heat Equation Parameters")
 
@@ -206,6 +212,7 @@ if dimension:
                 plt.close(fig_initial)
 
             # Animation
+
             if generate_animation == "True":
                 st.subheader("Solution Evolution")
                 with st.spinner("Creating animation..."):
@@ -217,16 +224,27 @@ if dimension:
                             ylabel="y" if dimension == "2D" else "",
                             cbarlabel="Temperature",
                             interval_ms=50,
+                            verbose=True
                         )
 
                         # Save animation to bytes buffer
-                        buf = io.BytesIO()
-                        anim.save(buf, writer="ffmpeg", fps=20)
-                        buf.seek(0)
+                        with tempfile.NamedTemporaryFile(suffix=".gif", delete=False) as tmp:
+                            tmp_path = tmp.name
 
+                        anim.save(tmp_path, writer="pillow", fps=20)
+
+                        with open(tmp_path, "rb") as f:
+                            gif_bytes = f.read()
+
+                        os.remove(tmp_path)
+
+                        # Display inline
+                        st.image(gif_bytes, caption="Heat Equation Evolution")
+
+                        # Offer Download
                         st.download_button(
                             label="Download Animation (GIF)",
-                            data=buf,
+                            data=gif_bytes,
                             file_name="pde_solution.gif",
                             mime="image/gif",
                         )
@@ -234,6 +252,12 @@ if dimension:
                         plt.close(fig)
                     except Exception as e:
                         st.warning(f"Animation creation failed: {e}")
+
+
+
+    # ****              Laplace's Equation Logic            ****
+
+
 
     elif equation == "Laplace's Equation":
         st.subheader("Boundary Conditions (Note: constant boundary conditions must be equal for PDE to be well-posed, function BC coming soon)")
@@ -283,7 +307,7 @@ if dimension:
                     boundary_conditions=bc_dict,
                 )
 
-            st.success("✓ Solution computed!")
+            st.success("Solution computed!")
 
             st.subheader("Solution")
             fig, ax = quick_plot_2d(
