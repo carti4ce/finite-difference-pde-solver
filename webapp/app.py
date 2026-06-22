@@ -181,7 +181,8 @@ if dimension:
             # Display results
             st.success("Solution computed!")
 
-            col_plot1, col_plot2 = st.columns(2)
+            col_plot1, col_plot2, *animation_plot = st.columns(2 if generate_animation == "False" else 3)
+            extent = [x_bounds[0], x_bounds[1], y_bounds[0], y_bounds[1]]
 
             with col_plot1:
                 st.subheader("Final Solution")
@@ -193,6 +194,7 @@ if dimension:
                     xlabel="x",
                     ylabel="y" if dimension == "2D" else "",
                     cbarlabel="Temperature",
+                    extent=extent
                 )
                 st.pyplot(fig_final)
                 plt.close(fig_final)
@@ -207,6 +209,7 @@ if dimension:
                     xlabel="x",
                     ylabel="y" if dimension == "2D" else "",
                     cbarlabel="Temperature",
+                    extent=extent
                 )
                 st.pyplot(fig_initial)
                 plt.close(fig_initial)
@@ -214,44 +217,47 @@ if dimension:
             # Animation
 
             if generate_animation == "True":
-                st.subheader("Solution Evolution")
-                with st.spinner("Creating animation..."):
-                    try:
-                        anim, fig = animated_plot_2d(
-                            solution_history,
-                            title="Heat Equation Evolution",
-                            xlabel="x",
-                            ylabel="y" if dimension == "2D" else "",
-                            cbarlabel="Temperature",
-                            interval_ms=50,
-                            verbose=True
-                        )
+                try:
+                    with animation_plot[0]:
+                        st.subheader("Solution Evolution")
+                        with st.spinner("Creating animation..."):
+                            
+                            anim, fig = animated_plot_2d(
+                                solution_history,
+                                title="Heat Equation Evolution",
+                                xlabel="x",
+                                ylabel="y" if dimension == "2D" else "",
+                                cbarlabel="Temperature",
+                                interval_ms=50,
+                                verbose=True,
+                                extent=extent
+                            )
 
-                        # Save animation to bytes buffer
-                        with tempfile.NamedTemporaryFile(suffix=".gif", delete=False) as tmp:
-                            tmp_path = tmp.name
+                            # Save animation to bytes buffer
+                            with tempfile.NamedTemporaryFile(suffix=".gif", delete=False) as tmp:
+                                tmp_path = tmp.name
 
-                        anim.save(tmp_path, writer="pillow", fps=20)
+                            anim.save(tmp_path, writer="pillow", fps=20)
 
-                        with open(tmp_path, "rb") as f:
-                            gif_bytes = f.read()
+                            with open(tmp_path, "rb") as f:
+                                gif_bytes = f.read()
 
-                        os.remove(tmp_path)
+                            os.remove(tmp_path)
 
-                        # Display inline
-                        st.image(gif_bytes, caption="Heat Equation Evolution")
+                            # Display inline
+                            st.image(gif_bytes)
 
-                        # Offer Download
-                        st.download_button(
-                            label="Download Animation (GIF)",
-                            data=gif_bytes,
-                            file_name="pde_solution.gif",
-                            mime="image/gif",
-                        )
-                        st.info("Animation saved. Click download button to get the GIF.")
-                        plt.close(fig)
-                    except Exception as e:
-                        st.warning(f"Animation creation failed: {e}")
+                    # Offer Download
+                    st.download_button(
+                        label="Download Animation (GIF)",
+                        data=gif_bytes,
+                        file_name="pde_solution.gif",
+                        mime="image/gif",
+                    )
+                    st.info("Animation saved. Click download button to get the GIF.")
+                    plt.close(fig)
+                except Exception as e:
+                    st.warning(f"Animation creation failed: {e}")
 
 
 

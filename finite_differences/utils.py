@@ -10,14 +10,15 @@ import numpy as np
 # plt.style.use(['science', 'notebook'])
 
 
-def quick_plot_2d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=None, ylabel=None, cbarlabel=None, cmap='viridis'):
+def quick_plot_2d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=None, ylabel=None, cbarlabel=None, cmap='viridis', extent=None):
     fig, ax = plt.subplots(figsize=(8,6))
     img = ax.imshow(
         arr.T, 
         origin="lower", 
         cmap=cmap,
         vmin=vmin_global,
-        vmax=vmax_global
+        vmax=vmax_global,
+        extent=extent
     )
 
     if title: ax.set_title(title)
@@ -28,7 +29,7 @@ def quick_plot_2d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=No
     return fig, ax
 
 
-def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, interval_ms=50, cmap='viridis', verbose=False):
+def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, interval_ms=50, cmap='viridis', verbose=False, extent=None):
 
     num_frames = arr.shape[0]
 
@@ -48,11 +49,14 @@ def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, 
     vmin_global = arr.min()
     vmax_global = arr.max()
 
-    im = ax.imshow(arr[0],
-                   origin='lower',
-                   cmap=cmap,
-                   vmin=vmin_global,
-                   vmax=vmax_global)
+    im = ax.imshow(
+        arr[0].T,
+        origin='lower',
+        cmap=cmap,
+        vmin=vmin_global,
+        vmax=vmax_global,
+        extent=extent
+    )
     
     if xlabel: ax.set_xlabel(xlabel)
     if ylabel: ax.set_ylabel(ylabel)
@@ -62,7 +66,7 @@ def animated_plot_2d(arr, title=None, xlabel=None, ylabel=None, cbarlabel=None, 
     title_obj = ax.set_title(f'{title} | Step {1} of {num_frames}')
 
     def update(frame):
-        new_data = arr[frame]
+        new_data = arr[frame].T
         im.set_array(new_data)
         title_obj.set_text(f'{title} | Step {frame} of {num_frames}')
         return im, title_obj
