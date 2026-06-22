@@ -49,7 +49,10 @@ def quick_plot_1d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=No
     if xlabel: ax.set_xlabel(xlabel)
     if ylabel: ax.set_ylabel(ylabel)
     # Set y axis limit slightly higher to display full plot
-    if vmax_global is not None: ax.set_ylim([vmin_global - 0.2 * abs(vmin_global - vmax_global), vmax_global * 1.2])
+    if vmax_global is not None: ax.set_ylim([
+        vmin_global - 0.2 * abs(vmin_global - vmax_global) if vmin_global != 0 else 0, 
+        vmax_global * 1.2
+    ])
 
     return fig, ax
 
@@ -129,7 +132,10 @@ def animated_plot_1d(arr, title=None, xlabel=None, ylabel=None, interval_ms=50, 
 
     if xlabel: ax.set_xlabel(xlabel)
     if ylabel: ax.set_ylabel(ylabel)
-    ax.set_ylim([vmin_global - 0.2 * abs(vmin_global - vmax_global), vmax_global * 1.2])
+    ax.set_ylim([
+        vmin_global - 0.2 * abs(vmin_global - vmax_global) if vmin_global != 0 else 0, 
+        vmax_global * 1.2
+    ])
     if title: ax.set_title(f'{title} | Step {0} of {num_frames - 1}')
 
     title_obj = ax.set_title(f'{title} | Step {1} of {num_frames}')
