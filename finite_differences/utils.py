@@ -5,12 +5,21 @@ from IPython.core.pylabtools import figsize
 from matplotlib.animation import FuncAnimation
 import numpy as np
 
-# Plot style library
-# import scienceplots
-# plt.style.use(['science', 'notebook'])
 
 def quick_plot(arr, dimension, vmin_global=None, vmax_global=None,
                title=None, xlabel=None, ylabel=None, cbarlabel=None, cmap='viridis', extent=None):
+    """
+        General static plot function
+
+        Acts as an entry point and calls appropriate quick plot function based on dimension parameter.
+        Args:
+            arr: array containing snapshot of solution to be plotted; is either 1 or 2 dimensional.
+            dimension: either "1D" or "2D"; determines which quickplot function is used
+            vmin_global, vmax_global: specifies the maximum function value attained, is used to maintain consistency in axis limits.
+                In 1-D, this corresponds to y axis limits. in 2-D, it corresponds to the colorbar limits.
+            extent: contains an array specifying the input intervals. In 1-D, this is the x limits. In 2-D, both the x and y limits.
+                Of the form [xlim1, xlim2, ylim1, ylim2]. (ylim1, ylim2) defaults to (0.0,1.0) if 1-D
+    """
     if dimension == "1D":
         return quick_plot_1d(arr, vmin_global=vmin_global, vmax_global=vmax_global, title=title, xlabel=xlabel, ylabel=ylabel, extent=extent)
     elif dimension == "2D":
@@ -18,9 +27,18 @@ def quick_plot(arr, dimension, vmin_global=None, vmax_global=None,
                              cbarlabel=cbarlabel, cmap=cmap, extent=extent)
     else:
         raise ValueError(f"Invalid Dimension: {dimension}")
+    
+
 
 def quick_plot_1d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=None, ylabel=None, extent=None):
+    """
+        Static plot function for 1-D data
 
+        Generates and returns a 1-D plot containing the data in arr. Uses extent and len(arr) to generate x axis. vmin and vmax determine
+        y axis.
+    """
+
+    # Create X axis
     n = len(arr)
     Xs = np.linspace(extent[0], extent[1], num=n, endpoint=True)
 
@@ -30,11 +48,20 @@ def quick_plot_1d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=No
     if title: ax.set_title(title)
     if xlabel: ax.set_xlabel(xlabel)
     if ylabel: ax.set_ylabel(ylabel)
+    # Set y axis limit slightly higher to display full plot
     if vmax_global is not None: ax.set_ylim([vmin_global * 0.8, vmax_global * 1.2])
 
     return fig, ax
 
 def quick_plot_2d(arr, vmin_global=None, vmax_global=None, title=None, xlabel=None, ylabel=None, cbarlabel=None, cmap='viridis', extent=None):
+    """
+        Static plot function for 2-D data
+
+        Generates and returns a 2-D color plot containing solution data.
+        Args:
+            vmin_global, vmax_global: Used to fix colorbar range
+            extent: Used to bound x and y axes based on domain
+    """
     fig, ax = plt.subplots(figsize=(8,6))
     img = ax.imshow(
         arr.T, 
