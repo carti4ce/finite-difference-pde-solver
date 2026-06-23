@@ -134,7 +134,7 @@ def solve_laplace_equation(
         def zero_source(X, Y):
             return np.zeros_like(X)
 
-        bc = Dirichlet(0.0)  # Not directly used by poisson solver, but kept for consistency
+        bc = Dirichlet(0.0) 
         solver = LinearSolver()
 
         solution = solve_poisson(grid, zero_source, bc=bc, solver=solver)
