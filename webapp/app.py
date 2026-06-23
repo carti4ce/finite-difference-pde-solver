@@ -35,6 +35,7 @@ with col2:
 
 # UI: Grid bounds
 if dimension:
+    if equation == "Laplace's Equation": st.subheader("Note: 1D Laplace equation is trivially solved and yields a line.")
     st.subheader("Domain Bounds")
     col_bounds_x, col_bounds_y = st.columns(2)
 
@@ -71,6 +72,7 @@ if dimension:
             ny = st.slider("Number of points (y)", min_value=10, max_value=200, value=50)
     else:
         ny = 1
+    extent = [x_bounds[0], x_bounds[1], y_bounds[0], y_bounds[1]]
 
 
 
@@ -183,7 +185,6 @@ if dimension:
             st.success("Solution computed!")
 
             col_plot1, col_plot2, *animation_plot = st.columns(2 if generate_animation == "False" else 3)
-            extent = [x_bounds[0], x_bounds[1], y_bounds[0], y_bounds[1]]
 
             with col_plot1:
                 st.subheader("Final Solution")
@@ -271,7 +272,7 @@ if dimension:
 
 
     elif equation == "Laplace's Equation":
-        st.subheader("Boundary Conditions (Note: constant boundary conditions must be equal for PDE to be well-posed, function BC coming soon)")
+        st.subheader("Boundary Conditions")
 
         if dimension == "1D":
             col_x1, col_x2 = st.columns(2)
@@ -328,6 +329,7 @@ if dimension:
                 xlabel="x",
                 ylabel="y" if dimension == "2D" else "",
                 cbarlabel="Temperature",
+                extent=extent
             )
             st.pyplot(fig)
             plt.close(fig)
