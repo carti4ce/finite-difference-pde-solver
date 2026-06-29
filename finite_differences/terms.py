@@ -9,16 +9,16 @@ class SpatialTerm(ABC):
 
 class DiffusionTerm(SpatialTerm):
 
-    def __init__(self, D):
-        self.D = D
+    def __init__(self, coeff):
+        self.coeff = coeff
 
     def apply(self, L, grid):
         return
     
 class AdvectionTerm(SpatialTerm):
 
-    def __init__(self, a, scheme="upwind"):
-        self.a = a
+    def __init__(self, coeff, scheme="upwind"):
+        self.coeff = coeff
         self.scheme = scheme        # Can be 'upwind' or 'central_difference'
 
     def apply(self, L, grid):
@@ -26,8 +26,8 @@ class AdvectionTerm(SpatialTerm):
     
 class ReactionTerm(SpatialTerm):
 
-    def __init__(self, c):
-        self.c = c
+    def __init__(self, coeff):
+        self.coeff = coeff
 
     def apply(self, L, grid):
         return
