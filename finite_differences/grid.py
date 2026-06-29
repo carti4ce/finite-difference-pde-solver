@@ -23,12 +23,16 @@ class Grid:
         self.dx = self.lx / float(self.nx + 1)
         self.dy = self.ly / float(self.ny + 1) if self.ny > 1 else None
 
+        self.spacing = {'x': self.dx} if ny == 1 else {'x': self.dx, 'y': self.dy}
         # node-centered coordinates (exclude physical boundary points)
         self.x = (np.arange(1, self.nx + 1)) * self.dx
         if self.ny > 1:
             self.y = (np.arange(1, self.ny + 1)) * self.dy
         else:
             self.y = None
+
+    def axes(self) -> Tuple[str]:
+        return list(self.spacing.keys())
 
     def shape(self) -> Tuple[int, int]:
         return (self.nx, self.ny)
@@ -53,10 +57,10 @@ class Grid:
 
     def ij_to_index(self, i: int, j: int = 0) -> int:
         """Convert 2D cell indices to flat index (row-major: i + j*nx)."""
-        return int(i + j * self.nx)
+        return int(i + j * self.ny)
 
     def index_to_ij(self, idx: int) -> Tuple[int, int]:
         """Convert flat index to (i,j)."""
-        i = int(idx % self.nx)
-        j = int(idx // self.nx)
+        i = int(idx % self.ny)
+        j = int(idx // self.ny)
         return i, j
