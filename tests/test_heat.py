@@ -30,7 +30,7 @@ def test_crank_nicolson_1d():
     f.set_interior(u0)
     bc = Dirichlet(0.0)
     solver = LinearSolver()
-    for n in range(steps):
+    for _ in range(steps):
         bc.apply(f)
         f = crank_nicolson(f, laplacian_5pt, dt, alpha, solver)
     bc.apply(f)
