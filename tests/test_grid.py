@@ -1,5 +1,6 @@
 import pytest
-from finite_differences import Grid, Field
+from finite_differences.grid import Grid
+from finite_differences.field import Field
 
 
 def test_grid_and_field_shapes():

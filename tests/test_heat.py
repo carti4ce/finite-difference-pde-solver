@@ -1,6 +1,7 @@
 import numpy as np
 
-from finite_differences import Grid, Field
+from finite_differences.grid import Grid
+from finite_differences.field import Field
 from finite_differences.bc import Dirichlet
 from finite_differences.operators import laplacian
 from finite_differences.operators import laplacian_5pt
