@@ -56,7 +56,7 @@ class Grid:
         return self.nx * self.ny
 
     def ij_to_index(self, i: int, j: int = 0) -> int:
-        """Convert 2D cell indices to flat index (row-major: i + j*nx)."""
+        """Convert 2D cell indices to flat index (row-major: i * ny + j)."""
         return int(i * self.ny + j)
 
     def index_to_ij(self, idx: int) -> Tuple[int, int]:
