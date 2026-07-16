@@ -1,6 +1,12 @@
-streamlit==1.58.0
-numpy==2.4.6
-scipy==1.17.1
-matplotlib==3.10.9
-pandas==3.0.3
-pillow==12.2.0
+# Core
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+
+# Development / testing
+pytest>=7.0
+
+# Optional: running or rebuilding the example notebook (examples/feature_tour.ipynb)
+# ipykernel
+# nbclient
+# nbformat

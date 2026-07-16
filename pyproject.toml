@@ -18,3 +18,4 @@ packages = ["finite_differences"]
 
 [project.optional-dependencies]
 web = ["streamlit"]
+dev = ["pytest>=7.0"]

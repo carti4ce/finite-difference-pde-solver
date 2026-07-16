@@ -1,43 +1,32 @@
-"""Poisson solver utilities."""
+"""Poisson / Laplace solvers built on the term-based `PDE` layer."""
 from __future__ import annotations
 
 import numpy as np
-from scipy import sparse
 
-from .operators import laplacian_5pt
-
-
-def assemble_rhs_from_source(grid, source_func):
-    """Evaluate source function at cell centers and return flattened RHS vector."""
-    X, Y = grid.mesh()
-    if grid.ny == 1:
-        f = source_func(X)
-        return f.copy()
-    f = source_func(X, Y)
-    return f.ravel(order="C").copy()
+from .bc import Dirichlet
+from .pde import PDE
+from .terms import DiffusionTerm, SourceTerm
 
 
 def solve_poisson(grid, source_func, bc=None, solver=None):
-    """Solve Poisson equation L u = f on a Cartesian cell-centered grid.
+    """Solve the Poisson equation ``laplacian(u) = f`` on a node-centered grid.
 
-    - `source_func` should be callable returning f(x, y) at cell centers.
-    - `bc` is currently ignored except that Dirichlet zero BC is assumed at boundaries.
-    - `solver` should implement `.solve(A, b)` and return solution vector.
+    Written as the steady problem ``0 = laplacian(u) - f``.
 
-    Returns a NumPy array of shape (nx, ny) with the interior solution.
+    Args:
+        source_func: callable returning ``f(x)`` (1D) or ``f(x, y)`` (2D) at the
+            interior node coordinates.
+        bc: a boundary condition (defaults to homogeneous `Dirichlet`). Nonzero
+            Dirichlet data is honored via the assembled boundary lift.
+        solver: object with ``.solve(A, b)`` (defaults to `LinearSolver`).
+
+    Returns:
+        Interior solution: shape ``(nx,)`` in 1D or ``(nx, ny)`` in 2D.
     """
-    nx, ny = grid.nx, grid.ny
-    N = nx * ny
-    A = laplacian_5pt(grid)
-    b = assemble_rhs_from_source(grid, source_func)
-    if solver is None:
-        # default to SciPy direct solver
-        from scipy.sparse.linalg import spsolve
+    bc = bc or Dirichlet(0.0)
 
-        u_flat = spsolve(A, b)
-    else:
-        u_flat = solver.solve(A, b)
+    def neg_source(*coords):
+        return -np.asarray(source_func(*coords), dtype=float)
 
-    if ny == 1:
-        return u_flat
-    return u_flat.reshape((nx, ny), order="C")
+    pde = PDE(grid, [DiffusionTerm(1.0), SourceTerm(neg_source)], bc, time_order=0)
+    return pde.solve_steady(solver=solver)

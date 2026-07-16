@@ -1,6 +1,6 @@
 import numpy as np
 
-from finite_differences import Grid
+from finite_differences.grid import Grid
 from finite_differences.poisson import solve_poisson
 
 

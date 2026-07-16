@@ -1,5 +1,6 @@
 import pytest
-from finite_differences import Grid, Field
+from finite_differences.grid import Grid
+from finite_differences.field import Field
 
 
 def test_grid_and_field_shapes():
@@ -25,3 +26,12 @@ def test_apply_dirichlet_bc():
     f.apply_bc(bc)
     # ghost corner should be 0.0
     assert f.data[0, 0] == 0.0
+
+def test_index_roundtrip():
+    grid = Grid(nx=4, ny=3)
+    for i in range(grid.nx):
+        for j in range(grid.ny):
+            idx = grid.ij_to_index(i, j)
+            assert grid.index_to_ij(idx) == (i, j)
+    # and cross-check against operators.py's convention directly
+    assert grid.ij_to_index(2, 1) == 2 * grid.ny + 1
