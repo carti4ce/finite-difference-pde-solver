@@ -1,9 +1,6 @@
 """Heat equation demo: explicit Euler and Crank-Nicolson options."""
-from finite_differences import Grid, Field
+from finite_differences import Grid, PDE, DiffusionTerm
 from finite_differences.bc import Dirichlet
-from finite_differences.operators import laplacian, laplacian_5pt
-from finite_differences.time_integrators import explicit_euler, crank_nicolson
-from finite_differences.solvers import LinearSolver
 from finite_differences.utils import quick_plot_2d, animated_plot_2d
 import matplotlib.pyplot as plt
 import time
@@ -11,48 +8,24 @@ import time
 import numpy as np
 
 
-def rhs_heat(field, alpha):
-    # apply BCs must be done before calling
-    lap = laplacian(field)
-    return alpha * lap
+def _initial_ring(grid):
+    X, Y = grid.mesh()
+    r = np.sqrt((X - 0.5)**2 + (Y - 0.5)**2)
+    return np.exp(-((r - 0.3)**2) / 0.005)
 
 
 def run_explicit(nx=64, ny=64, alpha=1e-3, dt=1e-4, steps=100):
     grid = Grid(nx, ny, lx=1.0, ly=1.0)
-    f = Field(grid, ng=1)
-    X, Y = grid.mesh()
-    r = np.sqrt((X - 0.5)**2 + (Y - 0.5)**2)
-    u0 = np.exp(-((r - 0.3)**2) / 0.005)
-    f.set_interior(u0)
-    bc = Dirichlet(0.0)
-    interior_history = []
-    for n in range(steps):
-        bc.apply(f)
-        interior_history.append(f.interior.copy())
-        u_interior = f.interior
-        u_new = explicit_euler(u_interior, lambda u: rhs_heat(f, alpha), dt)
-        # write back
-        f.set_interior(u_new)
-    bc.apply(f)
-    return np.asarray(interior_history)
+    pde = PDE(grid, [DiffusionTerm(alpha)], Dirichlet(0.0), time_order=1)
+    _, history = pde.integrate(dt=dt, steps=steps, u0=_initial_ring(grid), scheme="euler")
+    return history
 
 
 def run_cn(nx=64, ny=64, alpha=1e-3, dt=1e-3, steps=50):
     grid = Grid(nx, ny, lx=1.0, ly=1.0)
-    f = Field(grid, ng=1)
-    X, Y = grid.mesh()
-    r = np.sqrt((X - 0.5)**2 + (Y - 0.5)**2)
-    u0 = np.exp(-((r - 0.3)**2) / 0.005)
-    f.set_interior(u0)
-    bc = Dirichlet(0.0)
-    solver = LinearSolver()
-    interior_history = []
-    for _ in range(steps):
-        bc.apply(f)
-        f = crank_nicolson(f, laplacian_5pt, dt, alpha, solver)
-        interior_history.append(f.interior.copy())
-    bc.apply(f)
-    return np.asarray(interior_history)
+    pde = PDE(grid, [DiffusionTerm(alpha)], Dirichlet(0.0), time_order=1)
+    _, history = pde.integrate(dt=dt, steps=steps, u0=_initial_ring(grid), scheme="crank_nicolson")
+    return history
 
 
 if __name__ == '__main__':

@@ -44,12 +44,6 @@ class Grid:
         X, Y = np.meshgrid(self.x, self.y, indexing="ij")
         return X, Y
 
-    def index_to_coord(self, i: int, j: int = 0) -> Tuple[float, float]:
-        """Map integer cell index to cell-centered coordinates."""
-        x = (i + 0.5) * self.dx
-        y = (j + 0.5) * self.dy if self.ny > 1 else 0.0
-        return x, y
-
     @property
     def size(self) -> int:
         """Total number of cells (nx*ny)."""

@@ -5,8 +5,10 @@ finite_differences/bc.py
 finite_differences/field.py
 finite_differences/grid.py
 finite_differences/operators.py
+finite_differences/pde.py
 finite_differences/poisson.py
 finite_differences/solvers.py
+finite_differences/terms.py
 finite_differences/time_integrators.py
 finite_differences/utils.py
 finite_differences.egg-info/PKG-INFO
@@ -14,6 +16,10 @@ finite_differences.egg-info/SOURCES.txt
 finite_differences.egg-info/dependency_links.txt
 finite_differences.egg-info/requires.txt
 finite_differences.egg-info/top_level.txt
+tests/test_bc.py
 tests/test_grid.py
 tests/test_heat.py
+tests/test_operators.py
+tests/test_pde.py
 tests/test_poisson.py
+tests/test_utils.py
