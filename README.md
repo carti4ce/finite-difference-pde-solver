@@ -124,13 +124,6 @@ For a worked tour of all of the above with plots and animations, see
 | `finite_differences.solvers` | Sparse/dense linear solver adapters |
 | `finite_differences.utils` | Static and animated plotting helpers |
 
-## Example gallery (2-D heat equation)
-
-### Crank-Nicolson scheme
-![2D Heat: Crank-Nicolson](examples/example_plots/heat2d_CN_animation.gif)
-### Explicit Euler scheme
-![2D Heat: Explicit Euler](examples/example_plots/heat2d_explicit_animation.gif)
-
 ## On stability
 
 Explicit time integration of the heat equation requires the CFL stability condition:
