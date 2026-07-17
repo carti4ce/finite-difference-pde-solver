@@ -19,7 +19,7 @@ time-dependent ones by the **method of lines** with explicit or implicit integra
 - Composable spatial terms: DiffusionTerm, AdvectionTerm (upwind or central),
   ReactionTerm, SourceTerm, and FunctionTerm for nonlinear right-hand sides
 - Boundary conditions: Dirichlet, DirichletBox (per-edge values), Neumann
-  (including nonzero flux), and Periodic — consistent across the explicit,
+  (including nonzero flux), and Periodic, consistent across the explicit,
   implicit, and steady solver paths
 - Time integrators: explicit Euler, RK2, RK4, implicit Euler, Crank-Nicolson,
   and velocity Verlet for second-order (wave) problems
